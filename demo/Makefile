@@ -1,7 +1,7 @@
 #Makefile
 FC = mpif90
 OPT = -O2
-LIBPATH = /home/parallels/mpiexample/demo/
+LIBPATH = /home/hyt/mpi/mpi-demo/demo
 MYLIB = mympi
 LIBMYMPI = libmympi.a
 LIBOBJS = mybegin.o myend.o ring.o datatype.o mpistruct.o \

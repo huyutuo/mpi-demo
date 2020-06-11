@@ -1,0 +1,1 @@
+mpicc -O2 mpi-demo.c -o mpi-demo

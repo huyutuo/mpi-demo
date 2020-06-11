@@ -5,6 +5,6 @@ void mybegin(int *argc,char ***argv,MPI_Comm *comm,int *np,int *iam){
 	MPI_Comm_dup(MPI_COMM_WORLD,comm);
 	MPI_Comm_size(*comm,np);
 	MPI_Comm_rank(*comm,iam);
-	
+        printf("mybegin: np %d, iam %d\n", *np, *iam);	
 	return ;
 }

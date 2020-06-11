@@ -23,11 +23,12 @@ void main(int argc, char **argv){
 
 	MPI_Comm rowcom, colcom;
 	int rowid,colid;
-#define chkiteration
+#define chkdiagomal
 	
 	mybegin(&argc,&argv,&comm,&np,&iam);
 
 #ifdef chkiteration
+	// max_np = 6
 	en = 5;
 	n = en*np;
 	for(i=0;i<n;i++){
@@ -42,10 +43,11 @@ void main(int argc, char **argv){
 	iteration(comm, np,iam,n,en,&a[0][0],57,rhs,x,20);
 	printf("%f,%f on proc %d\n",x[0],x[1],iam);
 #endif
+
 #ifdef chksscan
 	a[0][0] = iam +1.0;
 //	sscan(comm, iam, a[0][0],2,&b[0][0]);
-	
+//将通信子内各进程的同一个变量参与前缀规约计算，并将得到的结果发送回每个进程，
 	MPI_Scan(&a[0][0], &b[0][0],1,MPI_FLOAT,MPI_SUM,comm);
 //	if(iam == 2)
 	printf("\nsum=%f in pros %d\n",b[0][0], iam);
@@ -57,6 +59,7 @@ void main(int argc, char **argv){
 	printf("Proc %d = (%d,%d)\n",iam,rowid,colid);
 
 #endif
+
 #ifdef chkreduce
 	mxl.a=(iam+1)*20;
 	mxl.m = iam;
@@ -94,6 +97,7 @@ void main(int argc, char **argv){
 		a[1][0],a[1][1],a[1][2],
 		a[1][3],a[1][4],a[1][5],iam);*/
 #endif
+
 #ifdef chkdiagomal
 	diagomal(2,3,57,&rect,&newtp);
 	MPI_Type_commit(&rect);
@@ -119,6 +123,7 @@ void main(int argc, char **argv){
 	MPI_Type_free(&rect);
 	MPI_Type_free(&newtp);
 #endif
+
 #ifdef chkstruct
 	mpistruct(&newtp);
 	MPI_Type_commit(&newtp);
@@ -146,6 +151,7 @@ void main(int argc, char **argv){
 				x[1].a,x[1].b[0],x[1].b[1],x[1].c[0],x[1].c[1],x[1].c[2]);
 	}
 #endif
+
 #ifdef chkdatatype
 	for(m=0;m<100;m++) narray[m]=m;
 	datatype("ivce",&newtp);
@@ -165,8 +171,8 @@ void main(int argc, char **argv){
 //	MPI_Comm_rank(comm,&iam);
 	m=iam;
 	n=100;
-//	ring(m, &n, comm, np, iam);
-//	printf("\nHello World from pros. %d and m=%d!\n",iam,n);
+	ring(m, &n, comm, np, iam);
+	printf("\nHello World from pros. %d and m=%d!\n",iam,n);
 	
 	myend();	
 //	MPI_Finalize();
